@@ -1,15 +1,6 @@
-"use strict";
-
-var _interopRequireDefault = require("/home/ccic/CCIC/braft-convert/node_modules/@babel/runtime/helpers/interopRequireDefault.js")["default"];
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.namedColors = exports.getToHTMLConfig = exports.getHexColor = exports.getFromHTMLConfig = exports.defaultFontFamilies = exports.blocks = void 0;
-var _objectWithoutProperties2 = _interopRequireDefault(require("/home/ccic/CCIC/braft-convert/node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js"));
-var _react = _interopRequireDefault(require("react"));
-var _excluded = ["class"],
-  _excluded2 = ["class"];
-var namedColors = {
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+import React from 'react';
+export const namedColors = {
   "aliceblue": "#f0f8ff",
   "antiquewhite": "#faebd7",
   "aqua": "#00ffff",
@@ -152,24 +143,17 @@ var namedColors = {
   "yellow": "#ffff00",
   "yellowgreen": "#9acd32"
 };
-exports.namedColors = namedColors;
-var getStyleValue = function getStyleValue(style) {
-  return style.split('-')[1];
-};
-var defaultUnitExportFn = function defaultUnitExportFn(unit) {
-  return unit + 'px';
-};
-var defaultUnitImportFn = function defaultUnitImportFn(unit) {
-  return unit.replace('px', '');
-};
-var ignoredNodeAttributes = ['style'];
-var ignoredEntityNodeAttributes = ['style', 'href', 'target', 'alt', 'title', 'id', 'controls', 'autoplay', 'loop', 'poster'];
-var spreadNodeAttributes = function spreadNodeAttributes(attributesObject) {
-  return Object.keys(attributesObject).reduce(function (attributeString, attributeName) {
-    return "".concat(attributeString, " ").concat(attributeName, "=\"").concat(attributesObject[attributeName], "\"");
+const getStyleValue = style => style.split('-')[1];
+const defaultUnitExportFn = unit => unit + 'px';
+const defaultUnitImportFn = unit => unit.replace('px', '');
+const ignoredNodeAttributes = ['style'];
+const ignoredEntityNodeAttributes = ['style', 'href', 'target', 'alt', 'title', 'id', 'controls', 'autoplay', 'loop', 'poster'];
+const spreadNodeAttributes = attributesObject => {
+  return Object.keys(attributesObject).reduce((attributeString, attributeName) => {
+    return `${attributeString} ${attributeName}="${attributesObject[attributeName]}"`;
   }, '').replace(/^\s$/, '');
 };
-var defaultFontFamilies = [{
+export const defaultFontFamilies = [{
   name: 'Araial',
   family: 'Arial, Helvetica, sans-serif'
 }, {
@@ -185,17 +169,16 @@ var defaultFontFamilies = [{
   name: 'Tahoma',
   family: "tahoma, arial, 'Hiragino Sans GB', 宋体, sans-serif"
 }];
-exports.defaultFontFamilies = defaultFontFamilies;
-var getHexColor = function getHexColor(color) {
+export const getHexColor = color => {
   color = color.replace('color:', '').replace(';', '').replace(' ', '');
   if (/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(color)) {
     return color;
   } else if (namedColors[color]) {
     return namedColors[color];
   } else if (color.indexOf('rgb') === 0) {
-    var rgbArray = color.split(',');
-    var convertedColor = rgbArray.length < 3 ? null : '#' + [rgbArray[0], rgbArray[1], rgbArray[2]].map(function (x) {
-      var hex = parseInt(x.replace(/\D/g, ''), 10).toString(16);
+    let rgbArray = color.split(',');
+    let convertedColor = rgbArray.length < 3 ? null : '#' + [rgbArray[0], rgbArray[1], rgbArray[2]].map(x => {
+      const hex = parseInt(x.replace(/\D/g, ''), 10).toString(16);
       return hex.length === 1 ? '0' + hex : hex;
     }).join('');
     return /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(convertedColor) ? convertedColor : null;
@@ -203,8 +186,7 @@ var getHexColor = function getHexColor(color) {
     return null;
   }
 };
-exports.getHexColor = getHexColor;
-var blocks = {
+export const blocks = {
   'header-one': 'h1',
   'header-two': 'h2',
   'header-three': 'h3',
@@ -214,93 +196,94 @@ var blocks = {
   'unstyled': 'p',
   'blockquote': 'blockquote'
 };
-exports.blocks = blocks;
-var blockTypes = Object.keys(blocks);
-var blockNames = blockTypes.map(function (key) {
-  return blocks[key];
-});
-var convertAtomicBlock = function convertAtomicBlock(block, contentState, blockNodeAttributes) {
+const blockTypes = Object.keys(blocks);
+const blockNames = blockTypes.map(key => blocks[key]);
+const convertAtomicBlock = (block, contentState, blockNodeAttributes) => {
   if (!block || !block.key) {
-    return /*#__PURE__*/_react["default"].createElement("p", null);
+    return /*#__PURE__*/React.createElement("p", null);
   }
-  var contentBlock = contentState.getBlockForKey(block.key);
-  var className = blockNodeAttributes["class"],
-    nodeAttrAsProps = (0, _objectWithoutProperties2["default"])(blockNodeAttributes, _excluded);
+  const contentBlock = contentState.getBlockForKey(block.key);
+  let {
+    class: className,
+    ...nodeAttrAsProps
+  } = blockNodeAttributes;
   nodeAttrAsProps.className = className;
   if (!contentBlock) {
-    return /*#__PURE__*/_react["default"].createElement("p", null);
+    return /*#__PURE__*/React.createElement("p", null);
   }
-  var entityKey = contentBlock.getEntityAt(0);
+  const entityKey = contentBlock.getEntityAt(0);
   if (!entityKey) {
-    return /*#__PURE__*/_react["default"].createElement("p", null);
+    return /*#__PURE__*/React.createElement("p", null);
   }
-  var entity = contentState.getEntity(entityKey);
-  var mediaType = entity.getType().toLowerCase();
-  var _block$data = block.data,
-    _float = _block$data["float"],
-    alignment = _block$data.alignment;
-  var _entity$getData = entity.getData(),
-    url = _entity$getData.url,
-    link = _entity$getData.link,
-    link_target = _entity$getData.link_target,
-    width = _entity$getData.width,
-    height = _entity$getData.height,
-    meta = _entity$getData.meta;
+  const entity = contentState.getEntity(entityKey);
+  const mediaType = entity.getType().toLowerCase();
+  let {
+    float,
+    alignment
+  } = block.data;
+  let {
+    url,
+    link,
+    link_target,
+    width,
+    height,
+    meta
+  } = entity.getData();
   if (mediaType === 'image') {
-    var imageWrapStyle = {};
-    var styledClassName = '';
-    if (_float) {
-      imageWrapStyle["float"] = _float;
-      styledClassName += ' float-' + _float;
+    let imageWrapStyle = {};
+    let styledClassName = '';
+    if (float) {
+      imageWrapStyle.float = float;
+      styledClassName += ' float-' + float;
     } else if (alignment) {
       imageWrapStyle.textAlign = alignment;
       styledClassName += ' align-' + alignment;
     }
     if (link) {
-      return /*#__PURE__*/_react["default"].createElement("div", {
+      return /*#__PURE__*/React.createElement("div", {
         className: "media-wrap image-wrap" + styledClassName,
         style: imageWrapStyle
-      }, /*#__PURE__*/_react["default"].createElement("a", {
+      }, /*#__PURE__*/React.createElement("a", {
         style: {
           display: 'inline-block'
         },
         href: link,
         target: link_target
-      }, /*#__PURE__*/_react["default"].createElement("img", Object.assign({}, nodeAttrAsProps, meta, {
+      }, /*#__PURE__*/React.createElement("img", _extends({}, nodeAttrAsProps, meta, {
         src: url,
         width: width,
         height: height,
         style: {
-          width: width,
-          height: height
+          width,
+          height
         }
       }))));
     } else {
-      return /*#__PURE__*/_react["default"].createElement("div", {
+      return /*#__PURE__*/React.createElement("div", {
         className: "media-wrap image-wrap" + styledClassName,
         style: imageWrapStyle
-      }, /*#__PURE__*/_react["default"].createElement("img", Object.assign({}, nodeAttrAsProps, meta, {
+      }, /*#__PURE__*/React.createElement("img", _extends({}, nodeAttrAsProps, meta, {
         src: url,
         width: width,
         height: height,
         style: {
-          width: width,
-          height: height
+          width,
+          height
         }
       })));
     }
   } else if (mediaType === 'audio') {
-    return /*#__PURE__*/_react["default"].createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "media-wrap audio-wrap"
-    }, /*#__PURE__*/_react["default"].createElement("audio", Object.assign({
+    }, /*#__PURE__*/React.createElement("audio", _extends({
       controls: true
     }, nodeAttrAsProps, meta, {
       src: url
     })));
   } else if (mediaType === 'video') {
-    return /*#__PURE__*/_react["default"].createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "media-wrap video-wrap"
-    }, /*#__PURE__*/_react["default"].createElement("video", Object.assign({
+    }, /*#__PURE__*/React.createElement("video", _extends({
       controls: true
     }, nodeAttrAsProps, meta, {
       src: url,
@@ -308,374 +291,363 @@ var convertAtomicBlock = function convertAtomicBlock(block, contentState, blockN
       height: height
     })));
   } else if (mediaType === 'embed') {
-    return /*#__PURE__*/_react["default"].createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "media-wrap embed-wrap"
-    }, /*#__PURE__*/_react["default"].createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       dangerouslySetInnerHTML: {
         __html: url
       }
     }));
   } else if (mediaType === 'hr') {
-    return /*#__PURE__*/_react["default"].createElement("hr", null);
+    return /*#__PURE__*/React.createElement("hr", null);
   } else {
-    return /*#__PURE__*/_react["default"].createElement("p", null);
+    return /*#__PURE__*/React.createElement("p", null);
   }
 };
-var entityToHTML = function entityToHTML(options) {
-  return function (entity, originalText) {
-    var entityExportFn = options.entityExportFn;
-    var entityType = entity.type.toLowerCase();
-    if (entityExportFn) {
-      var customOutput = entityExportFn(entity, originalText);
-      if (customOutput) {
-        return customOutput;
-      }
+const entityToHTML = options => (entity, originalText) => {
+  const {
+    entityExportFn
+  } = options;
+  const entityType = entity.type.toLowerCase();
+  if (entityExportFn) {
+    const customOutput = entityExportFn(entity, originalText);
+    if (customOutput) {
+      return customOutput;
     }
-    if (entityType === 'link') {
-      var _ref = entity.data.nodeAttributes || {},
-        className = _ref["class"],
-        nodeAttrAsProps = (0, _objectWithoutProperties2["default"])(_ref, _excluded2);
-      nodeAttrAsProps.className = className;
-      return /*#__PURE__*/_react["default"].createElement("a", Object.assign({
-        href: entity.data.href,
-        target: entity.data.target
-      }, nodeAttrAsProps));
-    }
-  };
+  }
+  if (entityType === 'link') {
+    let {
+      class: className,
+      ...nodeAttrAsProps
+    } = entity.data.nodeAttributes || {};
+    nodeAttrAsProps.className = className;
+    return /*#__PURE__*/React.createElement("a", _extends({
+      href: entity.data.href,
+      target: entity.data.target
+    }, nodeAttrAsProps));
+  }
 };
-var styleToHTML = function styleToHTML(options) {
-  return function (style) {
-    var unitExportFn = options.unitExportFn || defaultUnitExportFn;
-    if (options.styleExportFn) {
-      var customOutput = options.styleExportFn(style, options);
-      if (customOutput) {
-        return customOutput;
-      }
+const styleToHTML = options => style => {
+  const unitExportFn = options.unitExportFn || defaultUnitExportFn;
+  if (options.styleExportFn) {
+    const customOutput = options.styleExportFn(style, options);
+    if (customOutput) {
+      return customOutput;
     }
-    style = style.toLowerCase();
-    if (style === 'strikethrough') {
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          textDecoration: 'line-through'
-        }
-      });
-    } else if (style === 'superscript') {
-      return /*#__PURE__*/_react["default"].createElement("sup", null);
-    } else if (style === 'subscript') {
-      return /*#__PURE__*/_react["default"].createElement("sub", null);
-    } else if (style.indexOf('color-') === 0) {
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          color: '#' + getStyleValue(style)
-        }
-      });
-    } else if (style.indexOf('bgcolor-') === 0) {
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          backgroundColor: '#' + getStyleValue(style)
-        }
-      });
-    } else if (style.indexOf('fontsize-') === 0) {
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          fontSize: unitExportFn(getStyleValue(style), 'font-size', 'html')
-        }
-      });
-    } else if (style.indexOf('lineheight-') === 0) {
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          lineHeight: unitExportFn(getStyleValue(style), 'line-height', 'html')
-        }
-      });
-    } else if (style.indexOf('letterspacing-') === 0) {
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          letterSpacing: unitExportFn(getStyleValue(style), 'letter-spacing', 'html')
-        }
-      });
-    } else if (style.indexOf('fontfamily-') === 0) {
-      var fontFamily = options.fontFamilies.find(function (item) {
-        return item.name.toLowerCase() === getStyleValue(style);
-      });
+  }
+  style = style.toLowerCase();
+  if (style === 'strikethrough') {
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        textDecoration: 'line-through'
+      }
+    });
+  } else if (style === 'superscript') {
+    return /*#__PURE__*/React.createElement("sup", null);
+  } else if (style === 'subscript') {
+    return /*#__PURE__*/React.createElement("sub", null);
+  } else if (style.indexOf('color-') === 0) {
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: '#' + getStyleValue(style)
+      }
+    });
+  } else if (style.indexOf('bgcolor-') === 0) {
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        backgroundColor: '#' + getStyleValue(style)
+      }
+    });
+  } else if (style.indexOf('fontsize-') === 0) {
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: unitExportFn(getStyleValue(style), 'font-size', 'html')
+      }
+    });
+  } else if (style.indexOf('lineheight-') === 0) {
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        lineHeight: unitExportFn(getStyleValue(style), 'line-height', 'html')
+      }
+    });
+  } else if (style.indexOf('letterspacing-') === 0) {
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        letterSpacing: unitExportFn(getStyleValue(style), 'letter-spacing', 'html')
+      }
+    });
+  } else if (style.indexOf('fontfamily-') === 0) {
+    let fontFamily = options.fontFamilies.find(item => item.name.toLowerCase() === getStyleValue(style));
+    if (!fontFamily) return;
+    return /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontFamily: fontFamily.family
+      }
+    });
+  }
+};
+const blockToHTML = options => block => {
+  const {
+    blockExportFn,
+    contentState
+  } = options;
+  if (blockExportFn) {
+    const customOutput = blockExportFn(contentState, block);
+    if (customOutput) {
+      return customOutput;
+    }
+  }
+  let blockStyle = '';
+  const blockType = block.type.toLowerCase();
+  const {
+    textAlign,
+    textIndent,
+    nodeAttributes = {}
+  } = block.data;
+  const attributeString = spreadNodeAttributes(nodeAttributes);
+  if (textAlign || textIndent) {
+    blockStyle = ' style="';
+    if (textAlign) {
+      blockStyle += `text-align:${textAlign};`;
+    }
+    if (textIndent && !isNaN(textIndent) && textIndent > 0) {
+      blockStyle += `text-indent:${textIndent * 2}em;`;
+    }
+    blockStyle += '"';
+  }
+  if (blockType === 'atomic') {
+    return convertAtomicBlock(block, contentState, nodeAttributes);
+  } else if (blockType === 'code-block') {
+    const previousBlock = contentState.getBlockBefore(block.key);
+    const nextBlock = contentState.getBlockAfter(block.key);
+    const previousBlockType = previousBlock && previousBlock.getType();
+    const nextBlockType = nextBlock && nextBlock.getType();
+    let start = '';
+    let end = '';
+    if (previousBlockType !== 'code-block') {
+      start = `<pre${attributeString}><code>`;
+    } else {
+      start = '';
+    }
+    if (nextBlockType !== 'code-block') {
+      end = '</code></pre>';
+    } else {
+      end = '<br/>';
+    }
+    return {
+      start,
+      end
+    };
+  } else if (blocks[blockType]) {
+    return {
+      start: `<${blocks[blockType]}${blockStyle}${attributeString}>`,
+      end: `</${blocks[blockType]}>`
+    };
+  } else if (blockType === 'unordered-list-item') {
+    return {
+      start: `<li${blockStyle}${attributeString}>`,
+      end: '</li>',
+      nest: /*#__PURE__*/React.createElement("ul", null)
+    };
+  } else if (blockType === 'ordered-list-item') {
+    return {
+      start: `<li${blockStyle}${attributeString}>`,
+      end: '</li>',
+      nest: /*#__PURE__*/React.createElement("ol", null)
+    };
+  }
+};
+const htmlToStyle = (options, source) => (nodeName, node, currentStyle) => {
+  if (!node || !node.style) {
+    return currentStyle;
+  }
+  const unitImportFn = options.unitImportFn || defaultUnitImportFn;
+  let newStyle = currentStyle;
+  [].forEach.call(node.style, style => {
+    if (nodeName === 'span' && style === 'color') {
+      let color = getHexColor(node.style.color);
+      newStyle = color ? newStyle.add('COLOR-' + color.replace('#', '').toUpperCase()) : newStyle;
+    } else if (nodeName === 'span' && style === 'background-color') {
+      let color = getHexColor(node.style.backgroundColor);
+      newStyle = color ? newStyle.add('BGCOLOR-' + color.replace('#', '').toUpperCase()) : newStyle;
+    } else if (nodeName === 'span' && style === 'font-size') {
+      newStyle = newStyle.add('FONTSIZE-' + unitImportFn(node.style.fontSize, 'font-size', source));
+    } else if (nodeName === 'span' && style === 'line-height' && !isNaN(parseFloat(node.style.lineHeight, 10))) {
+      newStyle = newStyle.add('LINEHEIGHT-' + unitImportFn(node.style.lineHeight, 'line-height', source));
+    } else if (nodeName === 'span' && style === 'letter-spacing' && !isNaN(parseFloat(node.style.letterSpacing, 10))) {
+      newStyle = newStyle.add('LETTERSPACING-' + unitImportFn(node.style.letterSpacing, 'letter-spacing', source));
+    } else if (nodeName === 'span' && style === 'text-decoration') {
+      if (node.style.textDecoration === 'line-through') {
+        newStyle = newStyle.add('STRIKETHROUGH');
+      } else if (node.style.textDecoration === 'underline') {
+        newStyle = newStyle.add('UNDERLINE');
+      }
+    } else if (nodeName === 'span' && style === 'font-family') {
+      let fontFamily = options.fontFamilies.find(item => item.family.toLowerCase() === node.style.fontFamily.toLowerCase());
       if (!fontFamily) return;
-      return /*#__PURE__*/_react["default"].createElement("span", {
-        style: {
-          fontFamily: fontFamily.family
-        }
-      });
+      newStyle = newStyle.add('FONTFAMILY-' + fontFamily.name.toUpperCase());
     }
-  };
+  });
+  if (nodeName === 'sup') {
+    newStyle = newStyle.add('SUPERSCRIPT');
+  } else if (nodeName === 'sub') {
+    newStyle = newStyle.add('SUBSCRIPT');
+  }
+  options.styleImportFn && (newStyle = options.styleImportFn(nodeName, node, newStyle, source) || newStyle);
+  return newStyle;
 };
-var blockToHTML = function blockToHTML(options) {
-  return function (block) {
-    var blockExportFn = options.blockExportFn,
-      contentState = options.contentState;
-    if (blockExportFn) {
-      var customOutput = blockExportFn(contentState, block);
-      if (customOutput) {
-        return customOutput;
-      }
+const htmlToEntity = (options, source) => (nodeName, node, createEntity) => {
+  if (options && options.entityImportFn) {
+    const customInput = options.entityImportFn(nodeName, node, createEntity, source);
+    if (customInput) {
+      return customInput;
     }
-    var blockStyle = '';
-    var blockType = block.type.toLowerCase();
-    var _block$data2 = block.data,
-      textAlign = _block$data2.textAlign,
-      textIndent = _block$data2.textIndent,
-      _block$data2$nodeAttr = _block$data2.nodeAttributes,
-      nodeAttributes = _block$data2$nodeAttr === void 0 ? {} : _block$data2$nodeAttr;
-    var attributeString = spreadNodeAttributes(nodeAttributes);
-    if (textAlign || textIndent) {
-      blockStyle = ' style="';
-      if (textAlign) {
-        blockStyle += "text-align:".concat(textAlign, ";");
-      }
-      if (textIndent && !isNaN(textIndent) && textIndent > 0) {
-        blockStyle += "text-indent:".concat(textIndent * 2, "em;");
-      }
-      blockStyle += '"';
-    }
-    if (blockType === 'atomic') {
-      return convertAtomicBlock(block, contentState, nodeAttributes);
-    } else if (blockType === 'code-block') {
-      var previousBlock = contentState.getBlockBefore(block.key);
-      var nextBlock = contentState.getBlockAfter(block.key);
-      var previousBlockType = previousBlock && previousBlock.getType();
-      var nextBlockType = nextBlock && nextBlock.getType();
-      var start = '';
-      var end = '';
-      if (previousBlockType !== 'code-block') {
-        start = "<pre".concat(attributeString, "><code>");
-      } else {
-        start = '';
-      }
-      if (nextBlockType !== 'code-block') {
-        end = '</code></pre>';
-      } else {
-        end = '<br/>';
-      }
-      return {
-        start: start,
-        end: end
-      };
-    } else if (blocks[blockType]) {
-      return {
-        start: "<".concat(blocks[blockType]).concat(blockStyle).concat(attributeString, ">"),
-        end: "</".concat(blocks[blockType], ">")
-      };
-    } else if (blockType === 'unordered-list-item') {
-      return {
-        start: "<li".concat(blockStyle).concat(attributeString, ">"),
-        end: '</li>',
-        nest: /*#__PURE__*/_react["default"].createElement("ul", null)
-      };
-    } else if (blockType === 'ordered-list-item') {
-      return {
-        start: "<li".concat(blockStyle).concat(attributeString, ">"),
-        end: '</li>',
-        nest: /*#__PURE__*/_react["default"].createElement("ol", null)
-      };
-    }
-  };
-};
-var htmlToStyle = function htmlToStyle(options, source) {
-  return function (nodeName, node, currentStyle) {
-    if (!node || !node.style) {
-      return currentStyle;
-    }
-    var unitImportFn = options.unitImportFn || defaultUnitImportFn;
-    var newStyle = currentStyle;
-    [].forEach.call(node.style, function (style) {
-      if (nodeName === 'span' && style === 'color') {
-        var color = getHexColor(node.style.color);
-        newStyle = color ? newStyle.add('COLOR-' + color.replace('#', '').toUpperCase()) : newStyle;
-      } else if (nodeName === 'span' && style === 'background-color') {
-        var _color = getHexColor(node.style.backgroundColor);
-        newStyle = _color ? newStyle.add('BGCOLOR-' + _color.replace('#', '').toUpperCase()) : newStyle;
-      } else if (nodeName === 'span' && style === 'font-size') {
-        newStyle = newStyle.add('FONTSIZE-' + unitImportFn(node.style.fontSize, 'font-size', source));
-      } else if (nodeName === 'span' && style === 'line-height' && !isNaN(parseFloat(node.style.lineHeight, 10))) {
-        newStyle = newStyle.add('LINEHEIGHT-' + unitImportFn(node.style.lineHeight, 'line-height', source));
-      } else if (nodeName === 'span' && style === 'letter-spacing' && !isNaN(parseFloat(node.style.letterSpacing, 10))) {
-        newStyle = newStyle.add('LETTERSPACING-' + unitImportFn(node.style.letterSpacing, 'letter-spacing', source));
-      } else if (nodeName === 'span' && style === 'text-decoration') {
-        if (node.style.textDecoration === 'line-through') {
-          newStyle = newStyle.add('STRIKETHROUGH');
-        } else if (node.style.textDecoration === 'underline') {
-          newStyle = newStyle.add('UNDERLINE');
-        }
-      } else if (nodeName === 'span' && style === 'font-family') {
-        var fontFamily = options.fontFamilies.find(function (item) {
-          return item.family.toLowerCase() === node.style.fontFamily.toLowerCase();
-        });
-        if (!fontFamily) return;
-        newStyle = newStyle.add('FONTFAMILY-' + fontFamily.name.toUpperCase());
-      }
+  }
+  nodeName = nodeName.toLowerCase();
+  const {
+    alt,
+    title,
+    id,
+    controls,
+    autoplay,
+    loop,
+    poster
+  } = node;
+  let meta = {};
+  let nodeAttributes = {};
+  id && (meta.id = id);
+  alt && (meta.alt = alt);
+  title && (meta.title = title);
+  controls && (meta.controls = controls);
+  autoplay && (meta.autoPlay = autoplay);
+  loop && (meta.loop = loop);
+  poster && (meta.poster = poster);
+  node.attributes && Object.keys(node.attributes).forEach(key => {
+    let attr = node.attributes[key];
+    ignoredEntityNodeAttributes.indexOf(attr.name) === -1 && (nodeAttributes[attr.name] = attr.value);
+  });
+  if (nodeName === 'a' && !node.querySelectorAll('img').length) {
+    let href = node.getAttribute('href');
+    let target = node.getAttribute('target');
+    return createEntity('LINK', 'MUTABLE', {
+      href,
+      target,
+      nodeAttributes
     });
-    if (nodeName === 'sup') {
-      newStyle = newStyle.add('SUPERSCRIPT');
-    } else if (nodeName === 'sub') {
-      newStyle = newStyle.add('SUBSCRIPT');
-    }
-    options.styleImportFn && (newStyle = options.styleImportFn(nodeName, node, newStyle, source) || newStyle);
-    return newStyle;
-  };
-};
-var htmlToEntity = function htmlToEntity(options, source) {
-  return function (nodeName, node, createEntity) {
-    if (options && options.entityImportFn) {
-      var customInput = options.entityImportFn(nodeName, node, createEntity, source);
-      if (customInput) {
-        return customInput;
-      }
-    }
-    nodeName = nodeName.toLowerCase();
-    var alt = node.alt,
-      title = node.title,
-      id = node.id,
-      controls = node.controls,
-      autoplay = node.autoplay,
-      loop = node.loop,
-      poster = node.poster;
-    var meta = {};
-    var nodeAttributes = {};
-    id && (meta.id = id);
-    alt && (meta.alt = alt);
-    title && (meta.title = title);
-    controls && (meta.controls = controls);
-    autoplay && (meta.autoPlay = autoplay);
-    loop && (meta.loop = loop);
-    poster && (meta.poster = poster);
-    node.attributes && Object.keys(node.attributes).forEach(function (key) {
-      var attr = node.attributes[key];
-      ignoredEntityNodeAttributes.indexOf(attr.name) === -1 && (nodeAttributes[attr.name] = attr.value);
+  } else if (nodeName === 'audio') {
+    return createEntity('AUDIO', 'IMMUTABLE', {
+      url: node.getAttribute('src'),
+      meta,
+      nodeAttributes
     });
-    if (nodeName === 'a' && !node.querySelectorAll('img').length) {
-      var href = node.getAttribute('href');
-      var target = node.getAttribute('target');
-      return createEntity('LINK', 'MUTABLE', {
-        href: href,
-        target: target,
-        nodeAttributes: nodeAttributes
-      });
-    } else if (nodeName === 'audio') {
-      return createEntity('AUDIO', 'IMMUTABLE', {
-        url: node.getAttribute('src'),
-        meta: meta,
-        nodeAttributes: nodeAttributes
-      });
-    } else if (nodeName === 'video') {
-      return createEntity('VIDEO', 'IMMUTABLE', {
-        url: node.getAttribute('src'),
-        meta: meta,
-        nodeAttributes: nodeAttributes
-      });
-    } else if (nodeName === 'img') {
-      var parentNode = node.parentNode;
-      var entityData = {
-        meta: meta
-      };
-      var _node$style = node.style,
-        width = _node$style.width,
-        height = _node$style.height;
-      entityData.url = node.getAttribute('src');
-      width && (entityData.width = width);
-      height && (entityData.height = height);
-      if (parentNode.nodeName.toLowerCase() === 'a') {
-        entityData.link = parentNode.getAttribute('href');
-        entityData.link_target = parentNode.getAttribute('target');
-      }
-      return createEntity('IMAGE', 'IMMUTABLE', entityData);
-    } else if (nodeName === 'hr') {
-      return createEntity('HR', 'IMMUTABLE', {});
-    } else if (node.parentNode && node.parentNode.classList.contains('embed-wrap')) {
-      var embedContent = node.innerHTML || node.outerHTML;
-      if (embedContent) {
-        return createEntity('EMBED', 'IMMUTABLE', {
-          url: embedContent
-        });
-      }
-    }
-  };
-};
-var htmlToBlock = function htmlToBlock(options, source) {
-  return function (nodeName, node) {
-    if (options && options.blockImportFn) {
-      var customInput = options.blockImportFn(nodeName, node, source);
-      if (customInput) {
-        return customInput;
-      }
-    }
-    var nodeAttributes = {};
-    var nodeStyle = node.style || {};
-    node.attributes && Object.keys(node.attributes).forEach(function (key) {
-      var attr = node.attributes[key];
-      ignoredNodeAttributes.indexOf(attr.name) === -1 && (nodeAttributes[attr.name] = attr.value);
+  } else if (nodeName === 'video') {
+    return createEntity('VIDEO', 'IMMUTABLE', {
+      url: node.getAttribute('src'),
+      meta,
+      nodeAttributes
     });
-    if (node.classList && node.classList.contains('media-wrap')) {
-      return {
-        type: 'atomic',
-        data: {
-          nodeAttributes: nodeAttributes,
-          "float": nodeStyle["float"],
-          alignment: nodeStyle.textAlign
-        }
-      };
-    } else if (nodeName === 'img') {
-      return {
-        type: 'atomic',
-        data: {
-          nodeAttributes: nodeAttributes,
-          "float": nodeStyle["float"],
-          alignment: nodeStyle.textAlign
-        }
-      };
-    } else if (nodeName === 'hr') {
-      return {
-        type: 'atomic',
-        data: {
-          nodeAttributes: nodeAttributes
-        }
-      };
-    } else if (nodeName === 'pre') {
-      node.innerHTML = node.innerHTML.replace(/<code(.*?)>/g, '').replace(/<\/code>/g, '');
-      return {
-        type: 'code-block',
-        data: {
-          nodeAttributes: nodeAttributes
-        }
-      };
-    } else if (blockNames.indexOf(nodeName) !== -1) {
-      var blockData = {
-        nodeAttributes: nodeAttributes
-      };
-      if (nodeStyle.textAlign) {
-        blockData.textAlign = nodeStyle.textAlign;
-      }
-      if (nodeStyle.textIndent) {
-        blockData.textIndent = /^\d+em$/.test(nodeStyle.textIndent) ? Math.ceil(parseInt(nodeStyle.textIndent, 10) / 2) : 1;
-      }
-      return {
-        type: blockTypes[blockNames.indexOf(nodeName)],
-        data: blockData
-      };
+  } else if (nodeName === 'img') {
+    let parentNode = node.parentNode;
+    let entityData = {
+      meta
+    };
+    let {
+      width,
+      height
+    } = node.style;
+    entityData.url = node.getAttribute('src');
+    width && (entityData.width = width);
+    height && (entityData.height = height);
+    if (parentNode.nodeName.toLowerCase() === 'a') {
+      entityData.link = parentNode.getAttribute('href');
+      entityData.link_target = parentNode.getAttribute('target');
     }
-  };
+    return createEntity('IMAGE', 'IMMUTABLE', entityData);
+  } else if (nodeName === 'hr') {
+    return createEntity('HR', 'IMMUTABLE', {});
+  } else if (node.parentNode && node.parentNode.classList.contains('embed-wrap')) {
+    const embedContent = node.innerHTML || node.outerHTML;
+    if (embedContent) {
+      return createEntity('EMBED', 'IMMUTABLE', {
+        url: embedContent
+      });
+    }
+  }
 };
-var getToHTMLConfig = function getToHTMLConfig(options) {
+const htmlToBlock = (options, source) => (nodeName, node) => {
+  if (options && options.blockImportFn) {
+    const customInput = options.blockImportFn(nodeName, node, source);
+    if (customInput) {
+      return customInput;
+    }
+  }
+  let nodeAttributes = {};
+  let nodeStyle = node.style || {};
+  node.attributes && Object.keys(node.attributes).forEach(key => {
+    let attr = node.attributes[key];
+    ignoredNodeAttributes.indexOf(attr.name) === -1 && (nodeAttributes[attr.name] = attr.value);
+  });
+  if (node.classList && node.classList.contains('media-wrap')) {
+    return {
+      type: 'atomic',
+      data: {
+        nodeAttributes: nodeAttributes,
+        float: nodeStyle.float,
+        alignment: nodeStyle.textAlign
+      }
+    };
+  } else if (nodeName === 'img') {
+    return {
+      type: 'atomic',
+      data: {
+        nodeAttributes: nodeAttributes,
+        float: nodeStyle.float,
+        alignment: nodeStyle.textAlign
+      }
+    };
+  } else if (nodeName === 'hr') {
+    return {
+      type: 'atomic',
+      data: {
+        nodeAttributes
+      }
+    };
+  } else if (nodeName === 'pre') {
+    node.innerHTML = node.innerHTML.replace(/<code(.*?)>/g, '').replace(/<\/code>/g, '');
+    return {
+      type: 'code-block',
+      data: {
+        nodeAttributes
+      }
+    };
+  } else if (blockNames.indexOf(nodeName) !== -1) {
+    const blockData = {
+      nodeAttributes
+    };
+    if (nodeStyle.textAlign) {
+      blockData.textAlign = nodeStyle.textAlign;
+    }
+    if (nodeStyle.textIndent) {
+      blockData.textIndent = /^\d+em$/.test(nodeStyle.textIndent) ? Math.ceil(parseInt(nodeStyle.textIndent, 10) / 2) : 1;
+    }
+    return {
+      type: blockTypes[blockNames.indexOf(nodeName)],
+      data: blockData
+    };
+  }
+};
+export const getToHTMLConfig = options => {
   return {
     styleToHTML: styleToHTML(options),
     entityToHTML: entityToHTML(options),
     blockToHTML: blockToHTML(options)
   };
 };
-exports.getToHTMLConfig = getToHTMLConfig;
-var getFromHTMLConfig = function getFromHTMLConfig(options) {
-  var source = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'unknow';
+export const getFromHTMLConfig = (options, source = 'unknow') => {
   return {
     htmlToStyle: htmlToStyle(options, source),
     htmlToEntity: htmlToEntity(options, source),
     htmlToBlock: htmlToBlock(options, source)
   };
 };
-exports.getFromHTMLConfig = getFromHTMLConfig;
 //# sourceMappingURL=configs.js.map

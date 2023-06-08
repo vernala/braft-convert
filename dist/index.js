@@ -1,73 +1,71 @@
-"use strict";
-
-var _interopRequireDefault = require("/home/ccic/CCIC/braft-convert/node_modules/@babel/runtime/helpers/interopRequireDefault.js")["default"];
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.convertRawToHTML = exports.convertRawToEditorState = exports.convertHTMLToRaw = exports.convertHTMLToEditorState = exports.convertEditorStateToRaw = exports.convertEditorStateToHTML = void 0;
-var _objectSpread2 = _interopRequireDefault(require("/home/ccic/CCIC/braft-convert/node_modules/@babel/runtime/helpers/esm/objectSpread2.js"));
-var _draftConvert = require("draft-convert");
-var _configs = require("./configs");
-var _draftJs = require("draft-js");
-var defaultConvertOptions = {
-  fontFamilies: _configs.defaultFontFamilies
+import { convertToHTML, convertFromHTML } from 'draft-convert';
+import { getToHTMLConfig, getFromHTMLConfig, defaultFontFamilies } from './configs';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
+const defaultConvertOptions = {
+  fontFamilies: defaultFontFamilies
 };
-var convertRawToHTML = function convertRawToHTML(rawContent, options) {
-  options = (0, _objectSpread2["default"])((0, _objectSpread2["default"])({}, defaultConvertOptions), options);
+export const convertRawToHTML = (rawContent, options) => {
+  options = {
+    ...defaultConvertOptions,
+    ...options
+  };
   try {
-    var contentState = (0, _draftJs.convertFromRaw)(rawContent);
+    const contentState = convertFromRaw(rawContent);
     options.contentState = contentState;
-    return (0, _draftConvert.convertToHTML)((0, _configs.getToHTMLConfig)(options))(contentState);
+    return convertToHTML(getToHTMLConfig(options))(contentState);
   } catch (error) {
     console.warn(error);
     return '';
   }
 };
-exports.convertRawToHTML = convertRawToHTML;
-var convertHTMLToRaw = function convertHTMLToRaw(HTMLString, options, source) {
-  options = (0, _objectSpread2["default"])((0, _objectSpread2["default"])({}, defaultConvertOptions), options);
+export const convertHTMLToRaw = (HTMLString, options, source) => {
+  options = {
+    ...defaultConvertOptions,
+    ...options
+  };
   try {
-    var contentState = (0, _draftConvert.convertFromHTML)((0, _configs.getFromHTMLConfig)(options, source))(HTMLString);
-    return (0, _draftJs.convertToRaw)(contentState);
+    const contentState = convertFromHTML(getFromHTMLConfig(options, source))(HTMLString);
+    return convertToRaw(contentState);
   } catch (error) {
     console.warn(error);
     return {};
   }
 };
-exports.convertHTMLToRaw = convertHTMLToRaw;
-var convertEditorStateToHTML = function convertEditorStateToHTML(editorState, options) {
-  options = (0, _objectSpread2["default"])((0, _objectSpread2["default"])({}, defaultConvertOptions), options);
+export const convertEditorStateToHTML = (editorState, options) => {
+  options = {
+    ...defaultConvertOptions,
+    ...options
+  };
   try {
-    var contentState = editorState.getCurrentContent();
+    const contentState = editorState.getCurrentContent();
     options.contentState = contentState;
-    return (0, _draftConvert.convertToHTML)((0, _configs.getToHTMLConfig)(options))(contentState);
+    return convertToHTML(getToHTMLConfig(options))(contentState);
   } catch (error) {
     console.warn(error);
     return '';
   }
 };
-exports.convertEditorStateToHTML = convertEditorStateToHTML;
-var convertHTMLToEditorState = function convertHTMLToEditorState(HTMLString, editorDecorators, options, source) {
-  options = (0, _objectSpread2["default"])((0, _objectSpread2["default"])({}, defaultConvertOptions), options);
+export const convertHTMLToEditorState = (HTMLString, editorDecorators, options, source) => {
+  options = {
+    ...defaultConvertOptions,
+    ...options
+  };
   try {
-    return _draftJs.EditorState.createWithContent((0, _draftConvert.convertFromHTML)((0, _configs.getFromHTMLConfig)(options, source))(HTMLString), editorDecorators);
+    return EditorState.createWithContent(convertFromHTML(getFromHTMLConfig(options, source))(HTMLString), editorDecorators);
   } catch (error) {
     console.warn(error);
-    return _draftJs.EditorState.createEmpty(editorDecorators);
+    return EditorState.createEmpty(editorDecorators);
   }
 };
-exports.convertHTMLToEditorState = convertHTMLToEditorState;
-var convertEditorStateToRaw = function convertEditorStateToRaw(editorState) {
-  return (0, _draftJs.convertToRaw)(editorState.getCurrentContent());
+export const convertEditorStateToRaw = editorState => {
+  return convertToRaw(editorState.getCurrentContent());
 };
-exports.convertEditorStateToRaw = convertEditorStateToRaw;
-var convertRawToEditorState = function convertRawToEditorState(rawContent, editorDecorators) {
+export const convertRawToEditorState = (rawContent, editorDecorators) => {
   try {
-    return _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(rawContent), editorDecorators);
+    return EditorState.createWithContent(convertFromRaw(rawContent), editorDecorators);
   } catch (error) {
     console.warn(error);
-    return _draftJs.EditorState.createEmpty(editorDecorators);
+    return EditorState.createEmpty(editorDecorators);
   }
 };
-exports.convertRawToEditorState = convertRawToEditorState;
 //# sourceMappingURL=index.js.map
