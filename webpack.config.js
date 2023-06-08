@@ -3,6 +3,7 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: {
     index : './example/index.jsx'
   },
@@ -11,13 +12,14 @@ module.exports = {
     path: path.join(__dirname, './dist/example'),
     filename: '[name].js'
   },
+  //devtool:"source-map",
   module: {
     //加载器配置
-    loaders: [
+    rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loaders: [
+        use: [
           'babel-loader'
         ]
       }
@@ -36,8 +38,10 @@ module.exports = {
     })
   ],
   devServer: {
-    stats: { chunks:false },
-    contentBase: './example',
-    hot: true
+    static: {
+      directory: path.join(__dirname, './example'),
+    },
+    port: 5997,
+    hot: true,
   }
 };
